@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CareerNOVA — Assessment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="centered-shell">
+    <div class="container card">
+      <header class="top">
+        <h1 class="brand">CareerNOVA</h1>
+        <p class="lead">Select what best describes you. Pick multiple options per section (8–12 each).</p>
+      </header>
+
+      <form id="career-form" class="form">
+        <!-- Interests -->
+        <div class="collapsible-card">
+          <button type="button" class="collapsible">🎯 Interests</button>
+          <div class="content">
+            <div class="options-grid" id="interests"></div>
+          </div>
+        </div>
+
+        <!-- Subjects -->
+        <div class="collapsible-card">
+          <button type="button" class="collapsible">📚 Subjects (Till 12th)</button>
+          <div class="content">
+            <div class="options-grid" id="subjects"></div>
+          </div>
+        </div>
+
+        <!-- Personality -->
+        <div class="collapsible-card">
+          <button type="button" class="collapsible">💫 Personality Traits</button>
+          <div class="content">
+            <div class="options-grid" id="personality"></div>
+          </div>
+        </div>
+
+        <!-- Lifestyle -->
+        <div class="collapsible-card">
+          <button type="button" class="collapsible">💼 Dream Lifestyle / Work Style</button>
+          <div class="content">
+            <div class="options-grid" id="lifestyle"></div>
+          </div>
+        </div>
+
+        <!-- Hobbies -->
+        <div class="collapsible-card">
+          <button type="button" class="collapsible">🎮 Hobbies & Skills</button>
+          <div class="content">
+            <div class="options-grid" id="hobbies"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:18px;">
+          <button type="submit" class="primary-btn">🔎 Analyze My Career Path</button>
+        </div>
+      </form>
+
+      <footer class="muted small" style="text-align:center;margin-top:12px;">
+        Tip: choose 4–10 options across categories for the best results.
+      </footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
