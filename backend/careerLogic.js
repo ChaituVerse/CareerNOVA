@@ -1,59 +1,56 @@
-// careerLogic.js — simple rule-based matcher
-const careersData = require('./careersData');
+const careersData = require("./careersData");
 
-function arrayOverlapCount(a = [], b = []) {
-  const setB = new Set(b.map(x => String(x).toLowerCase()));
-  return a.reduce((s, v) => s + (setB.has(String(v).toLowerCase()) ? 1 : 0), 0);
-}
+function getCareerRecommendation(userSelections) {
+  let bestCareer = null;
+  let highestScore = 0;
 
-function getCareerRecommendation(userSelections = {}) {
-  // userSelections: { interests:[], subjects:[], personality:[], lifestyle:[], hobbies:[] }
-  const categories = ['interests','subjects','personality','lifestyle','hobbies'];
-  const results = [];
-
-  careersData.forEach(career => {
+  for (const career of careersData) {
     let score = 0;
-    let maxPossible = 0;
 
-    // For each category, compute overlap count
-    categories.forEach(cat => {
-      const careerTags = career.rules && career.rules[cat] ? career.rules[cat] : [];
-      const userTags = userSelections[cat] || [];
-      const overlap = arrayOverlapCount(careerTags, userTags);
-      score += overlap;
-      maxPossible += Math.min(careerTags.length, Math.max(1, userTags.length)); // conservative cap
-    });
+    // Match Interests
+    if (userSelections.interests && career.rules.interests) {
+      score += userSelections.interests.filter(i =>
+        career.rules.interests.includes(i)
+      ).length * 3;
+    }
 
-    // Avoid divide by zero
-    const percent = maxPossible > 0 ? Math.round((score / maxPossible) * 100) : 0;
-    results.push({ career, score, percent });
-  });
+    // Match Subjects
+    if (userSelections.subjects && career.rules.subjects) {
+      score += userSelections.subjects.filter(s =>
+        career.rules.subjects.includes(s)
+      ).length * 2;
+    }
 
-  // sort by percent desc then score
-  results.sort((a,b) => b.percent - a.percent || b.score - a.score);
+    // Match Personality
+    if (userSelections.personality && career.rules.personality) {
+      score += userSelections.personality.filter(p =>
+        career.rules.personality.includes(p)
+      ).length * 2;
+    }
 
-  // top result
-  const top = results[0] || null;
+    // Match Lifestyle
+    if (userSelections.lifestyle && career.rules.lifestyle) {
+      score += userSelections.lifestyle.filter(l =>
+        career.rules.lifestyle.includes(l)
+      ).length * 1.5;
+    }
 
-  // return normalized object for frontend: { careerPath: {...}, matchScore: N }
-  if (top) {
-    const { career, percent } = top;
-    const careerResult = {
-      id: career.id,
-      careerTitle: career.careerTitle,
-      tagline: career.tagline,
-      skills: career.skills,
-      roadmapImg: career.roadmapImg,
-      whyFit: career.whyFit,
-      courses: career.courses,
-      colleges: career.colleges,
-      nextSteps: career.nextSteps,
-      matchedRules: { percent }
-    };
-    return { careerPath: careerResult, matchScore: percent };
-  } else {
-    return { careerPath: null, matchScore: 0 };
+    // Match Hobbies
+    if (userSelections.hobbies && career.rules.hobbies) {
+      score += userSelections.hobbies.filter(h =>
+        career.rules.hobbies.includes(h)
+      ).length * 1;
+    }
+
+    // Update the highest-scoring career
+    if (score > highestScore) {
+      highestScore = score;
+      bestCareer = career;
+    }
   }
+
+  // Default fallback (if no strong match)
+  return bestCareer || careersData[0];
 }
 
 module.exports = { getCareerRecommendation };
